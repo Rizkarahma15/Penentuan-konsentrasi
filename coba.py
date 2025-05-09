@@ -9,10 +9,6 @@ if not os.path.exists('requirements.txt'):
         "matplotlib"
     ]
     with open('requirements.txt', 'w') as f:
-
-
-
-
         for package in requirements:
             f.write(package + '\n')
     print("✅ File requirements.txt berhasil dibuat!")
@@ -32,12 +28,18 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     sum_x_squared = np.sum(X**2)
     sum_y_squared = np.sum(Y**2)
 
+    denominator_b = (n * sum_x_squared - sum_x**2)
+    denominator_r = np.sqrt((n * sum_x_squared - sum_x**2) * (n * sum_y_squared - sum_y**2))
+
+    if denominator_b == 0 or denominator_r == 0:
+        raise ValueError("Pembagi menjadi nol. Pastikan data tidak konstan.")
+
     # Menghitung koefisien regresi
-    b = (n * sum_xy - sum_x * sum_y) / (n * sum_x_squared - sum_x**2)
+    b = (n * sum_xy - sum_x * sum_y) / denominator_b
     a = (sum_y - b * sum_x) / n
 
     # Menghitung koefisien korelasi
-    r = (n * sum_xy - sum_x * sum_y) / np.sqrt((n * sum_x_squared - sum_x*2) * (n * sum_y_squared - sum_y*2))
+    r = (n * sum_xy - sum_x * sum_y) / denominator_r
 
     equation = f'{var_name_y} = {a:.2f} + {b:.2f}{var_name_x}'
     regression_info = {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
@@ -72,7 +74,7 @@ def main():
     """, unsafe_allow_html=True)
 
     # Gambar
-    img_url = "https://imgur.com/a/YW2sCww"  # Link direct gambar
+    img_url = "https://i.imgur.com/YW2sCww.png"  # HARUS direct image URL
     st.markdown(f"""
         <style>
         .floating-image {{
@@ -100,8 +102,8 @@ def main():
     1. Kayla Nurrahma Siswoyo (2420606)  
     2. Nahda Rensa Subari (2420632)  
     3. Rizka Rahmawati Shavendira (2420656)  
-    4. Ummu Nabiilah (2420676)
-    5. Dinda Aryantika (2320520)
+    4. Ummu Nabiilah (2420676)  
+    5. Dinda Aryantika (2320520)
     """)
 
     # Kalkulator Regresi
@@ -151,7 +153,6 @@ def main():
             y_input = st.number_input(f'Masukkan nilai {var_name_y} yang ingin dihitung X-nya:', value=0.0)
 
             if y_input is not None:
-                # Menghitung nilai X berdasarkan Y menggunakan persamaan regresi
                 b = regression_info['slope']
                 a = regression_info['intercept']
                 if b != 0:
@@ -159,12 +160,11 @@ def main():
                     st.write(f"Nilai X untuk Y = {y_input} adalah: {X_calculated:.2f}")
                 else:
                     st.write("Tidak dapat menghitung X karena slope (b) adalah 0.")
-
         except Exception as e:
             st.error(f"Terjadi kesalahan dalam memproses data: {e}")
     else:
         st.warning("Masukkan data yang valid untuk X dan Y dalam tabel di atas.")
 
+# Eksekusi aplikasi
 if __name__ == '__main__':
     main()
-
