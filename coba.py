@@ -1,6 +1,10 @@
 import os
+import streamlit as st
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
 
-# Bagian tambahan: Membuat requirements.txt kalau belum ada
+# --- Bagian membuat requirements.txt ---
 if not os.path.exists('requirements.txt'):
     requirements = [
         "streamlit",
@@ -13,13 +17,7 @@ if not os.path.exists('requirements.txt'):
             f.write(package + '\n')
     print("✅ File requirements.txt berhasil dibuat!")
 
-# --- Mulai coding asli kamu ---
-import streamlit as st
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-
-# Fungsi untuk menghitung persamaan regresi linier dan koefisien korelasi
+# --- Fungsi Regresi Linier ---
 def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     n = len(X)
     sum_x = np.sum(X)
@@ -28,109 +26,80 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     sum_x_squared = np.sum(X**2)
     sum_y_squared = np.sum(Y**2)
 
-    # Menghitung koefisien regresi
     b = (n * sum_xy - sum_x * sum_y) / (n * sum_x_squared - sum_x**2)
     a = (sum_y - b * sum_x) / n
 
-    # Menghitung koefisien korelasi
-    r = (n * sum_xy - sum_x * sum_y) / np.sqrt((n * sum_x_squared - sum_x*2) * (n * sum_y_squared - sum_y*2))
+    r = (n * sum_xy - sum_x * sum_y) / np.sqrt((n * sum_x_squared - sum_x**2) * (n * sum_y_squared - sum_y**2))
 
     equation = f'{var_name_y} = {a:.2f} + {b:.2f}{var_name_x}'
-    regression_info = {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
-    return regression_info
+    return {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
 
-# Halaman aplikasi Streamlit
+# --- Aplikasi Streamlit ---
 def main():
-    st.title('✨ Penentuan Konsentrasi Dari Persamaan Regresi Deret Standar ✨')
-    st.write('Penentuan konsentrasi dari persamaan regresi deret standar yang dapat memudahkan analisis tanpa perlu menghitung secara manual. ENJOY FOR ACCESS 🧪👩‍🔬')
-    st.markdown(" **SCROLL FOR MORE!!!")
+    st.set_page_config(page_title="Regresi Linear Konsentrasi", layout="centered")
 
-    # CSS untuk gradasi warna pastel colorful dan animasi
-    background_color_start = "#FFB6C1"  # Light Pink
-    background_color_end = "#B0E0E6"    # Powder Blue
-    st.markdown(f"""
+    # CSS custom untuk gradasi dan animasi
+    st.markdown("""
         <style>
-        .stApp {{
-            background: linear-gradient(135deg, {background_color_start}, {background_color_end}) !important;
+        .stApp {
+            background: linear-gradient(135deg, #FFB6C1, #B0E0E6);
             font-family: 'Comic Sans MS', cursive, sans-serif;
-        }}
-        h1 {{
+        }
+        h1 {
             text-align: center;
             color: #8B4513;
             animation: floating 3s ease-in-out infinite;
-        }}
-        @keyframes floating {{
-            0% {{ transform: translateY(0); }}
-            50% {{ transform: translateY(-10px); }}
-            100% {{ transform: translateY(0); }}
-        }}
+        }
+        @keyframes floating {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0); }
+        }
         </style>
     """, unsafe_allow_html=True)
 
-    # Gambar
-    img_url = "https://i.imgur.com/NuOnLxQ.jpeg"  # Link direct gambar
-    st.markdown(f"""
-        <style>
-        .floating-image {{
-            width: 60%;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            animation: float 4s ease-in-out infinite;
-            border-radius: 20px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-        }}
-        @keyframes float {{
-            0% {{ transform: translateY(0px); }}
-            50% {{ transform: translateY(-15px); }}
-            100% {{ transform: translateY(0px); }}
-        }}
-        </style>
-        <img src="{img_url}" class="floating-image">
-    """, unsafe_allow_html=True)
+    st.title('✨ Penentuan Konsentrasi dari Persamaan Regresi ✨')
+    st.markdown("Aplikasi ini menghitung konsentrasi dari data absorbansi menggunakan persamaan regresi linier.")
 
-    # Perkenalan Kelompok
+    # Gambar ilustrasi (ganti link jika perlu)
+    st.image("https://i.imgur.com/dC1lzOj.png", caption="Ilustrasi Analisis Laboratorium", use_column_width=True)
+
+    # Identitas kelompok
     st.header("👥 Kelompok 11 (E2-PMIP)")
-    st.write("""
-    1. Kayla Nurrahma Siswoyo (2420606)  
-    2. Nahda Rensa Subari (2420632)  
-    3. Rizka Rahmawati Shavendira (2420656)  
-    4. Ummu Nabiilah (2420676)
+    st.markdown("""
+    - Kayla Nurrahma Siswoyo (2420606)  
+    - Nahda Rensa Subari (2420632)  
+    - Rizka Rahmawati Shavendira (2420656)  
+    - Ummu Nabiilah (2420676)  
+    - Dinda Aryantika (2320520)
     """)
 
-    # Kalkulator Regresi
-    st.header("📈 Kalkulator Regresi Linear")
-    st.write("Masukkan data di bawah ini:")
+    st.divider()
 
-    # Default data
-    default_data = pd.DataFrame({
-        'X': [0.0, 0.0, 0.0, 0.0],
-        'Y': [0.0, 0.0, 0.0, 0.0]
-    })
-
-    # Input data tabel
+    # Input data
+    st.subheader("📊 Masukkan Data Deret Standar (X = Konsentrasi, Y = Absorbansi)")
+    default_data = pd.DataFrame({'X': [1, 2, 3, 4], 'Y': [0.1, 0.2, 0.3, 0.4]})
     data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
 
-    var_name_x = st.text_input('Nama variabel X:', 'x')
-    var_name_y = st.text_input('Nama variabel Y:', 'y')
+    var_name_x = st.text_input("Nama variabel X:", "Konsentrasi")
+    var_name_y = st.text_input("Nama variabel Y:", "Absorbansi")
 
     if not data_df.empty and 'X' in data_df.columns and 'Y' in data_df.columns:
         try:
             X = data_df['X'].astype(float).to_numpy()
             Y = data_df['Y'].astype(float).to_numpy()
 
-            # Menghitung persamaan regresi linier dan koefisien korelasi
             regression_info = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
-            # Output Hasil Regresi
-            st.markdown("## Hasil dari persamaan regresi yang dihitung adalah:")
-            st.markdown(f"### 📌 {regression_info['equation']}")
+            # Tampilkan persamaan regresi
+            st.markdown("## Hasil Regresi:")
+            st.success(f"📌 Persamaan: **{regression_info['equation']}**")
+            st.info(f"Nilai slope (b): {regression_info['slope']:.4f}")
+            st.info(f"Nilai intercept (a): {regression_info['intercept']:.4f}")
+            st.info(f"Koefisien korelasi (r): {regression_info['r_value']:.4f}")
 
-            st.write(f"Slope (b): {regression_info['slope']:.2f}")
-            st.write(f"Intercept (a): {regression_info['intercept']:.2f}")
-            st.write(f"Koefisien Korelasi (r): {regression_info['r_value']:.4f}")
-
-            # Menampilkan grafik regresi
+            # Grafik regresi
+            st.subheader("📈 Grafik Regresi Linear")
             fig, ax = plt.subplots()
             ax.scatter(X, Y, color='blue', label='Data')
             ax.plot(X, regression_info['intercept'] + regression_info['slope'] * X, color='red', label='Regresi')
@@ -138,26 +107,27 @@ def main():
             ax.set_ylabel(var_name_y)
             ax.set_title('Grafik Regresi Linear')
             ax.legend()
+            plt.tight_layout()
             st.pyplot(fig)
 
-            # Input untuk menghitung X berdasarkan Y
-            st.header("📊 Hitung Nilai X Berdasarkan Y")
-            y_input = st.number_input(f'Masukkan nilai {var_name_y} yang ingin dihitung X-nya:', value=0.0)
+            # Hitung konsentrasi dari absorbansi input
+            st.subheader("🔍 Hitung Konsentrasi Berdasarkan Absorbansi")
+            y_input = st.number_input(f"Masukkan nilai {var_name_y} (absorbansi):", value=0.0, step=0.01)
 
-            if y_input is not None:
-                # Menghitung nilai X berdasarkan Y menggunakan persamaan regresi
-                b = regression_info['slope']
-                a = regression_info['intercept']
-                if b != 0:
-                    X_calculated = (y_input - a) / b
-                    st.write(f"Nilai X untuk Y = {y_input} adalah: {X_calculated:.2f}")
-                else:
-                    st.write("Tidak dapat menghitung X karena slope (b) adalah 0.")
+            b = regression_info['slope']
+            a = regression_info['intercept']
+
+            if b != 0:
+                x_result = (y_input - a) / b
+                st.success(f"Nilai {var_name_x} (konsentrasi) adalah: **{x_result:.4f}**")
+            else:
+                st.warning("Slope (b) = 0, tidak bisa menghitung konsentrasi.")
 
         except Exception as e:
-            st.error(f"Terjadi kesalahan dalam memproses data: {e}")
+            st.error(f"Terjadi kesalahan: {e}")
     else:
-        st.warning("Masukkan data yang valid untuk X dan Y dalam tabel di atas.")
+        st.warning("Harap isi data X dan Y dengan benar.")
 
-if _name_ == '_main_':
-    main()
+# --- Jalankan aplikasi ---
+if __name__ == '__main__':
+    main()
