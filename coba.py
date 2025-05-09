@@ -68,7 +68,7 @@ def main():
     """, unsafe_allow_html=True)
 
     # Gambar
-    img_url = "https://i.imgur.com/YW2sCww.jpg"  # Link direct gambar
+    img_url = "https://imgur.com/a/2Rx1Ogm"  # Link direct gambar
     st.markdown(f"""
         <style>
         .floating-image {{
