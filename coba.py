@@ -65,7 +65,7 @@ def main():
     """, unsafe_allow_html=True)
 
     # Tampilkan gambar
-    img_url = "https://imgur.com/a/CQeniy1.jpg"  # URL gambar langsung
+    img_url = "https://i.imgur.com/ZCCw6Ry.jpg"  # Pastikan ini direct image link yang benar
     st.markdown(f'<img src="{img_url}" class="floating-image">', unsafe_allow_html=True)
 
     # Perkenalan
