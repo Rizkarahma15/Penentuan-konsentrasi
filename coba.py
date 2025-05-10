@@ -1,7 +1,7 @@
 import streamlit as st
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt  # Pastikan ini tidak menyebabkan masalah
+import plotly.graph_objects as go  # Mengganti matplotlib dengan plotly
 from PIL import Image
 
 # Fungsi regresi
@@ -93,15 +93,16 @@ def main():
             st.write(f"Intercept (a): {reg['intercept']:.2f}")
             st.write(f"Koefisien Korelasi (r): {reg['r_value']:.4f}")
 
-            # Grafik
-            fig, ax = plt.subplots()
-            ax.scatter(X, Y, color='blue', label='Data')
-            ax.plot(X, reg['intercept'] + reg['slope'] * X, color='red', label='Regresi')
-            ax.set_xlabel(var_name_x)
-            ax.set_ylabel(var_name_y)
-            ax.set_title('Grafik Regresi Linear')
-            ax.legend()
-            st.pyplot(fig)
+            # Grafik dengan Plotly
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(x=X, y=Y, mode='markers', name='Data'))
+            fig.add_trace(go.Scatter(x=X, y=reg['intercept'] + reg['slope'] * X, mode='lines', name='Regresi'))
+            fig.update_layout(
+                title='Grafik Regresi Linear',
+                xaxis_title=var_name_x,
+                yaxis_title=var_name_y
+            )
+            st.plotly_chart(fig)
 
             # Kalkulasi berdasarkan Y
             st.header("📊 Hitung Nilai X Berdasarkan Y")
