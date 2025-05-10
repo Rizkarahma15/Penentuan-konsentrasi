@@ -1,15 +1,8 @@
-import os
 import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# Buat requirements.txt otomatis
-if not os.path.exists('requirements.txt'):
-    with open('requirements.txt', 'w') as f:
-        f.write("streamlit\nnumpy\npandas\nmatplotlib\nPillow\n")
-
-# Fungsi regresi
 def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     n = len(X)
     sum_x = np.sum(X)
@@ -20,108 +13,52 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
 
     b = (n * sum_xy - sum_x * sum_y) / (n * sum_x_squared - sum_x**2)
     a = (sum_y - b * sum_x) / n
-
     r = (n * sum_xy - sum_x * sum_y) / np.sqrt((n * sum_x_squared - sum_x**2) * (n * sum_y_squared - sum_y**2))
 
     equation = f'{var_name_y} = {a:.2f} + {b:.2f}{var_name_x}'
     return {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
 
 def main():
-    st.set_page_config(page_title="Regresi Deret Standar", layout="centered")
-    st.title('✨ Penentuan Konsentrasi dari Persamaan Regresi Deret Standar ✨')
-    st.write('Penentuan konsentrasi dari persamaan regresi deret standar yang dapat memudahkan analisis tanpa perlu menghitung secara manual. ENJOY FOR ACCESS 🧪👩‍🔬')
+    st.title('📊 Aplikasi Regresi Linear Deret Standar')
+    st.write('Masukkan data X dan Y untuk menghitung persamaan regresi.')
 
-    # Gradasi CSS
-    st.markdown("""
-        <style>
-        .stApp {
-            background: linear-gradient(135deg, #FFB6C1, #B0E0E6);
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-        }
-        h1 {
-            text-align: center;
-            color: #8B4513;
-            animation: floating 3s ease-in-out infinite;
-        }
-        @keyframes floating {
-            0% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0); }
-        }
-        .floating-image {
-            width: 60%;
-            display: block;
-            margin: auto;
-            animation: float 4s ease-in-out infinite;
-            border-radius: 20px;
-            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-        }
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        </style>
-    """, unsafe_allow_html=True)
+    df = st.data_editor(pd.DataFrame({'X': [0.0]*4, 'Y': [0.0]*4}), num_rows="dynamic")
 
-    # Tampilkan gambar
-    img_url = "https://i.imgur.com/ZCCw6Ry.jpg"
-    st.markdown(f'<img src="{img_url}" class="floating-image">', unsafe_allow_html=True)
+    var_name_x = st.text_input("Nama variabel X:", "x")
+    var_name_y = st.text_input("Nama variabel Y:", "y")
 
-    # Perkenalan
-    st.header("INTRODUCTION OUR TEAM")
-    st.subheader("👥 Kelompok 11 (E2-PMIP)")
-    st.markdown("""
-    1. Kayla Nurrahma Siswoyo (2420606)  
-    2. Nahda Rensa Subari (2420632)  
-    3. Rizka Rahmawati Shavendira (2420656)  
-    4. Ummu Nabiilah (2420676)  
-    5. Dinda Aryantika (2320520)
-    """)
-
-    st.header("📈 Kalkulator Regresi Linear")
-    default_data = pd.DataFrame({'X': [0.0]*4, 'Y': [0.0]*4})
-    data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
-
-    var_name_x = st.text_input('Nama variabel X:', 'x')
-    var_name_y = st.text_input('Nama variabel Y:', 'y')
-
-    if not data_df.empty and 'X' in data_df.columns and 'Y' in data_df.columns:
+    if not df.empty and 'X' in df.columns and 'Y' in df.columns:
         try:
-            X = data_df['X'].astype(float).to_numpy()
-            Y = data_df['Y'].astype(float).to_numpy()
+            X = df['X'].astype(float).to_numpy()
+            Y = df['Y'].astype(float).to_numpy()
 
             reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
-            st.markdown("## Hasil Regresi:")
-            st.markdown(f"### 📌 {reg['equation']}")
-            st.write(f"Slope (b): {reg['slope']:.2f}")
-            st.write(f"Intercept (a): {reg['intercept']:.2f}")
-            st.write(f"Koefisien Korelasi (r): {reg['r_value']:.4f}")
+            st.subheader("📈 Hasil Regresi")
+            st.markdown(f"**Persamaan:** `{reg['equation']}`")
+            st.write(f"Intercept (a): `{reg['intercept']:.2f}`")
+            st.write(f"Slope (b): `{reg['slope']:.2f}`")
+            st.write(f"Koefisien Korelasi (r): `{reg['r_value']:.4f}`")
 
             # Grafik
             fig, ax = plt.subplots()
-            ax.scatter(X, Y, color='blue', label='Data')
+            ax.scatter(X, Y, color='blue', label='Data Asli')
             ax.plot(X, reg['intercept'] + reg['slope'] * X, color='red', label='Regresi')
             ax.set_xlabel(var_name_x)
             ax.set_ylabel(var_name_y)
-            ax.set_title('Grafik Regresi Linear')
             ax.legend()
             st.pyplot(fig)
 
-            # Kalkulasi berdasarkan Y
-            st.header("📊 Hitung Nilai X Berdasarkan Y")
+            # Perkiraan X dari Y
+            st.subheader("🔍 Hitung X dari nilai Y")
             y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
-
-            b = reg['slope']
-            a = reg['intercept']
-            if b != 0:
-                x_calc = (y_input - a) / b
-                st.success(f"Nilai {var_name_x} untuk {var_name_y} = {y_input} adalah: {x_calc:.2f}")
+            if reg['slope'] != 0:
+                x_calc = (y_input - reg['intercept']) / reg['slope']
+                st.success(f"Nilai {var_name_x} untuk {var_name_y} = {y_input} adalah: **{x_calc:.2f}**")
             else:
-                st.error("Slope (b) = 0, tidak bisa menghitung X.")
+                st.error("Slope = 0, tidak bisa menghitung X.")
         except Exception as e:
-            st.error(f"❌ Terjadi kesalahan: {e}")
+            st.error(f"Terjadi kesalahan: {e}")
     else:
         st.warning("⚠️ Harap masukkan data X dan Y yang valid.")
 
