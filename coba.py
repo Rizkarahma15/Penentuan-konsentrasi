@@ -3,7 +3,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from PIL import Image
+from PIL import Image  # Pastikan juga ada PIL, meski tidak dipakai di kode ini, pastikan librarynya terinstall
 
 # Buat requirements.txt otomatis
 if not os.path.exists('requirements.txt'):
