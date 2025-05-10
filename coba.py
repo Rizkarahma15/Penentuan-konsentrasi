@@ -128,4 +128,5 @@ def main():
 
 # Pastikan ini ditulis dengan benar
 if __name__ == '__main__':
-    main()
+    main()
+
