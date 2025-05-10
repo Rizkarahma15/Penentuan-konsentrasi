@@ -3,7 +3,6 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from PIL import Image
 
 # Buat requirements.txt otomatis
 if not os.path.exists('requirements.txt'):
@@ -28,6 +27,7 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     return {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
 
 def main():
+    st.set_page_config(page_title="Regresi Deret Standar", layout="centered")
     st.title('✨ Penentuan Konsentrasi dari Persamaan Regresi Deret Standar ✨')
     st.write('Penentuan konsentrasi dari persamaan regresi deret standar yang dapat memudahkan analisis tanpa perlu menghitung secara manual. ENJOY FOR ACCESS 🧪👩‍🔬')
 
@@ -65,13 +65,13 @@ def main():
     """, unsafe_allow_html=True)
 
     # Tampilkan gambar
-    img_url = "https://i.imgur.com/ZCCw6Ry.jpg"  # Pastikan ini direct image link yang benar
+    img_url = "https://i.imgur.com/ZCCw6Ry.jpg"
     st.markdown(f'<img src="{img_url}" class="floating-image">', unsafe_allow_html=True)
 
     # Perkenalan
     st.header("INTRODUCTION OUR TEAM")
     st.subheader("👥 Kelompok 11 (E2-PMIP)")
-    st.write("""
+    st.markdown("""
     1. Kayla Nurrahma Siswoyo (2420606)  
     2. Nahda Rensa Subari (2420632)  
     3. Rizka Rahmawati Shavendira (2420656)  
@@ -113,19 +113,16 @@ def main():
             st.header("📊 Hitung Nilai X Berdasarkan Y")
             y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
 
-            if y_input is not None:
-                b = reg['slope']
+            if b := reg['slope']:
                 a = reg['intercept']
-                if b != 0:
-                    x_calc = (y_input - a) / b
-                    st.success(f"Nilai {var_name_x} untuk {var_name_y} = {y_input} adalah: {x_calc:.2f}")
-                else:
-                    st.error("Slope (b) = 0, tidak bisa menghitung X.")
+                x_calc = (y_input - a) / b
+                st.success(f"Nilai {var_name_x} untuk {var_name_y} = {y_input} adalah: {x_calc:.2f}")
+            else:
+                st.error("Slope (b) = 0, tidak bisa menghitung X.")
         except Exception as e:
             st.error(f"❌ Terjadi kesalahan: {e}")
     else:
         st.warning("⚠️ Harap masukkan data X dan Y yang valid.")
 
-# Pastikan ini ditulis dengan benar
 if __name__ == '__main__':
     main()
