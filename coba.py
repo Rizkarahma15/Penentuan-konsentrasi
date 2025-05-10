@@ -3,7 +3,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from PIL import Image  # Pastikan library ini terinstal jika digunakan
+from PIL import Image
 
 # Buat requirements.txt otomatis
 if not os.path.exists('requirements.txt'):
@@ -22,7 +22,7 @@ def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
     b = (n * sum_xy - sum_x * sum_y) / (n * sum_x_squared - sum_x**2)
     a = (sum_y - b * sum_x) / n
 
-    r = (n * sum_xy - sum_x * sum_y) / np.sqrt((n * sum_x_squared - sum_x**2) * (n * sum_y_squared - sum_y**2))
+    r = (n * sum_xy - sum_x * sum_y) / np.sqrt((n * sum_x_squared - sum_x*2) * (n * sum_y_squared - sum_y*2))
 
     equation = f'{var_name_y} = {a:.2f} + {b:.2f}{var_name_x}'
     return {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
@@ -128,4 +128,4 @@ def main():
 
 # Pastikan ini ditulis dengan benar
 if __name__ == '__main__':
-    main()
+    main()
