@@ -113,8 +113,9 @@ def main():
             st.header("📊 Hitung Nilai X Berdasarkan Y")
             y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
 
-            if b := reg['slope']:
-                a = reg['intercept']
+            b = reg['slope']
+            a = reg['intercept']
+            if b != 0:
                 x_calc = (y_input - a) / b
                 st.success(f"Nilai {var_name_x} untuk {var_name_y} = {y_input} adalah: {x_calc:.2f}")
             else:
