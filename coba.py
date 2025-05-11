@@ -105,7 +105,13 @@ def main():
             if len(X) < 2:
                 st.warning("⚠️ Minimal diperlukan 2 titik data untuk regresi.")
             elif np.all(X == X[0]):
-                st.warning("⚠️ Tidak bisa menghitung regresi. Pastikan mengisi data terlebih dahulu ya!!")
+                st.warning("📝 Petunjuk Penggunaan:
+Silakan isi data X dan Y terlebih dahulu pada tabel di atas. Setelah data dimasukkan, aplikasi akan secara otomatis menampilkan:
+✅ Grafik regresi linear
+✅ Persamaan regresi
+✅ Koefisien korelasi
+
+Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghitung nilai X (konsentrasi) dengan cepat dan akurat.")
             else:
                 reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
