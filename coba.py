@@ -81,6 +81,7 @@ def main():
     # Perkenalan
     st.header("INTRODUCTION OUR TEAM")
     st.subheader("👥 Kelompok 11 (E2-PMIP)")
+
     st.write("""
     1. Kayla Nurrahma Siswoyo (2420606)  
     2. Nahda Rensa Subari (2420632)  
@@ -90,7 +91,9 @@ def main():
     """)
 
     st.header("📈 Kalkulator Regresi Linear")
-    default_data = pd.DataFrame({'X': [1.0, 2.0, 3.0, 4.0], 'Y': [2.0, 4.0, 6.0, 8.0]})  # Default data
+    
+    # Data default 0
+    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})  
     data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
 
     var_name_x = st.text_input('Nama variabel X:', 'x')
