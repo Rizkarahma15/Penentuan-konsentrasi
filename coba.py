@@ -104,7 +104,7 @@ def main():
             if len(X) < 2:
                 st.warning("⚠️ Minimal diperlukan 2 titik data untuk regresi.")
             elif np.all(X == X[0]):
-                st.warning("⚠️ Semua nilai X sama. Tidak bisa menghitung regresi linear.")
+                st.warning("⚠️ Semua nilai X sama. Tidak bisa menghitung regresi linear. MASUKKAN DATA TERLEBIH DAHULU AGAR PERS. REGRESI, GRAFIK DAPAT MUNCUL")
             else:
                 reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
