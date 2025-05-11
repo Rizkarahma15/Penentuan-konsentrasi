@@ -105,7 +105,7 @@ def main():
             if len(X) < 2:
                 st.warning("⚠️ Minimal diperlukan 2 titik data untuk regresi.")
             elif np.all(X == X[0]):
-                st.warning("⚠️ Semua nilai X sama. Tidak bisa menghitung regresi linear.")
+                st.warning("⚠️ Tidak bisa menghitung regresi. Pastikan mengisi data terlebih dahulu ya!!")
             else:
                 reg = calculate_regression_equation(X, Y, var_name_x, var_name_y)
 
