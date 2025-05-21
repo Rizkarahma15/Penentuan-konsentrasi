@@ -1,41 +1,4 @@
-import os
-import streamlit as st
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt  # WAJIB agar grafik muncul
-
-# Buat requirements.txt otomatis
-if not os.path.exists('requirements.txt'):
-    with open('requirements.txt', 'w') as f:
-        f.write("streamlit\nnumpy\npandas\nmatplotlib\nPillow\n")
-
-# Fungsi regresi
-def calculate_regression_equation(X, Y, var_name_x='x', var_name_y='y'):
-    n = len(X)
-    if n < 2:
-        raise ValueError("Jumlah data harus minimal 2 titik.")
-
-    sum_x = np.sum(X)
-    sum_y = np.sum(Y)
-    sum_xy = np.sum(X * Y)
-    sum_x_squared = np.sum(X**2)
-    sum_y_squared = np.sum(Y**2)
-
-    denominator = (n * sum_x_squared - sum_x**2)
-    if denominator == 0:
-        raise ZeroDivisionError("Pembagi dalam perhitungan slope bernilai nol. Pastikan data X tidak sama semua.")
-
-    b = (n * sum_xy - sum_x * sum_y) / denominator
-    a = (sum_y - b * sum_x) / n
-
-    r_denominator = np.sqrt((n * sum_x_squared - sum_x**2) * (n * sum_y_squared - sum_y**2))
-    if r_denominator == 0:
-        r = 0
-    else:
-        r = (n * sum_xy - sum_x * sum_y) / r_denominator
-
-    equation = f'{var_name_y} = {a:.2f} + {b:.2f}{var_name_x}'
-    return {'equation': equation, 'intercept': a, 'slope': b, 'r_value': r}
+# ... bagian atas kode tetap sama ...
 
 def main():
     st.title('✨ Penentuan Konsentrasi dari Persamaan Regresi Deret Standar ✨')
@@ -134,7 +97,10 @@ Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghit
 
                 # Kalkulasi berdasarkan Y
                 st.header("📊 Hitung Nilai X Berdasarkan Y")
+
                 y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
+
+                # Tombol Hitung tepat di bawah input y_input
                 tombol_hitung = st.button("🔍 Hitung")
 
                 if tombol_hitung:
@@ -150,6 +116,5 @@ Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghit
     else:
         st.warning("⚠️ Harap masukkan data X dan Y yang valid.")
 
-# Jalankan aplikasi
 if __name__ == '__main__':
     main()
