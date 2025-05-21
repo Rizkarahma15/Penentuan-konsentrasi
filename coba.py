@@ -74,11 +74,10 @@ def main():
         </style>
     """, unsafe_allow_html=True)
 
-    # Tampilkan gambar
+    # Gambar dan Tim
     img_url = "https://i.imgur.com/ZCCw6Ry.jpg"
     st.markdown(f'<img src="{img_url}" class="floating-image">', unsafe_allow_html=True)
 
-    # Perkenalan
     st.header("INTRODUCTION OUR TEAM")
     st.subheader("👥 Kelompok 11 (E2-PMIP)")
     st.write("""
@@ -89,14 +88,14 @@ def main():
     5. Dinda Aryantika (2320520)
     """)
 
+    # Kalkulator Regresi
     st.header("📈 Kalkulator Regresi Linear")
-    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})  # Default data
+    default_data = pd.DataFrame({'X': [0.0, 0.0, 0.0, 0.0], 'Y': [0.0, 0.0, 0.0, 0.0]})
     data_df = st.data_editor(default_data, num_rows="dynamic", use_container_width=True)
 
     var_name_x = st.text_input('Nama variabel X:', 'x')
     var_name_y = st.text_input('Nama variabel Y:', 'y')
 
-    # Menampilkan grafik, persamaan regresi, dan kolom input untuk Y agar bisa hitung X
     if not data_df.empty and 'X' in data_df.columns and 'Y' in data_df.columns:
         try:
             X = data_df['X'].astype(float).to_numpy()
@@ -136,8 +135,9 @@ Setelah itu, kamu bisa memasukkan nilai Y pada kolom yang tersedia untuk menghit
                 # Kalkulasi berdasarkan Y
                 st.header("📊 Hitung Nilai X Berdasarkan Y")
                 y_input = st.number_input(f'Masukkan nilai {var_name_y}:', value=0.0)
+                tombol_hitung = st.button("🔍 Hitung")
 
-                if y_input is not None:
+                if tombol_hitung:
                     b = reg['slope']
                     a = reg['intercept']
                     if b != 0:
